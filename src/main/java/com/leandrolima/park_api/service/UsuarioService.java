@@ -3,8 +3,11 @@ package com.leandrolima.park_api.service;
 import com.leandrolima.park_api.entity.Usuario;
 import com.leandrolima.park_api.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.TimeZoneColumn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -22,5 +25,17 @@ public class UsuarioService {
         return usuarioRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Usuário não encontrado")
         );
+    }
+    @Transactional
+    public Usuario editarSenha(Long id, String password) {
+        Usuario user = buscarPorId(id);
+        user.setPassword(password);
+        return user;
+
+    }
+
+    @Transactional(readOnly = true)
+    public List<Usuario> buscarTodos() {
+        return usuarioRepository.findAll();
     }
 }
