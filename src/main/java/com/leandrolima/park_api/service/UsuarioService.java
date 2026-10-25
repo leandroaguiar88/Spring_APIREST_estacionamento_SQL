@@ -3,7 +3,6 @@ package com.leandrolima.park_api.service;
 import com.leandrolima.park_api.entity.Usuario;
 import com.leandrolima.park_api.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.TimeZoneColumn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,9 +26,17 @@ public class UsuarioService {
         );
     }
     @Transactional
-    public Usuario editarSenha(Long id, String password) {
+    public Usuario editarSenha(Long id, String senhaAtual, String novaSenha, String confirmaSenha) {
+        if (!novaSenha.equals(confirmaSenha)){
+            throw new RuntimeException("Nova senha não confere com a confirmação de senha");
+        }
         Usuario user = buscarPorId(id);
-        user.setPassword(password);
+        if (!user.getPassword().equals(senhaAtual)){
+            throw new RuntimeException("Sua senha não confere.");
+        }
+
+
+        user.setPassword(novaSenha);
         return user;
 
     }
