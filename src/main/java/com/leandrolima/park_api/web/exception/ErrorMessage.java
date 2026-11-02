@@ -1,5 +1,6 @@
 package com.leandrolima.park_api.web.exception;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,6 +17,7 @@ public class ErrorMessage {
     private String method;
     private int status;
     private String statusText;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String message;
     private Map<String, String> errors;
 
