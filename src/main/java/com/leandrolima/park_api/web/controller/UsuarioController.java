@@ -69,13 +69,10 @@ public class UsuarioController {
     @Operation(summary = "Atualizar senha", description = "Recurso exige um Bearer Token. Acesso restrito a ADMIN|CLIENTE",
             security = @SecurityRequirement(name = "security"),
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Senha atualizada com sucesso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = Void.class))),
+                    @ApiResponse(responseCode = "204", description = "Senha atualizada com sucesso"),
                     @ApiResponse(responseCode = "400", description = "Senha não confere",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "403", description = "Usuário sem permissão para acessar esse recurso",
-                            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
-                    @ApiResponse(responseCode = "404", description = "Recurso não encontrado",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
                     @ApiResponse(responseCode = "422", description = "Dados inválidos ou incompletos",
                             content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorMessage.class))),
@@ -85,8 +82,8 @@ public class UsuarioController {
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'CLIENTE') AND (#id == authentication.principal.id")
     public ResponseEntity<UsuarioResponseDto> updatePassword(@PathVariable Long id, @Valid @RequestBody UsuarioSenhaDto dto) {
-        Usuario user = usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
-        return ResponseEntity.ok(UsuarioMapper.toDto(user));
+        usuarioService.editarSenha(id, dto.getSenhaAtual(), dto.getNovaSenha(), dto.getConfirmaSenha());
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Buscar todos usuário cadastrados", description = "Recurso exige um Bearer Token. Acesso restrito a ADMIN",
